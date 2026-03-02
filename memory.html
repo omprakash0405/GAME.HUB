@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Memory Game</title>
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#141e30,#243b55);
+font-family:sans-serif;
+color:white;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+#moves{
+margin-bottom:15px;
+font-size:18px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(4,90px);
+grid-gap:15px;
+perspective:1000px;
+}
+
+.card{
+width:90px;
+height:90px;
+position:relative;
+transform-style:preserve-3d;
+transition:transform 0.6s;
+cursor:pointer;
+}
+
+.card.flip{
+transform:rotateY(180deg);
+}
+
+.front, .back{
+position:absolute;
+width:100%;
+height:100%;
+border-radius:12px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:30px;
+backface-visibility:hidden;
+}
+
+.front{
+background:rgba(255,255,255,0.1);
+}
+
+.back{
+background:#00c853;
+transform:rotateY(180deg);
+color:white;
+}
+
+button{
+margin-top:20px;
+padding:8px 20px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#ff4081;
+color:white;
+}
+
+button:hover{
+opacity:0.8;
+}
+</style>
+</head>
+<body>
+
+<h1>Memory Game</h1>
+<div id="moves">Moves: 0</div>
+<div class="grid" id="grid"></div>
+<button onclick="restart()">Restart</button>
+
+<script>
+const symbols=["🍎","🍌","🍇","🍉","🍓","🍍","🥝","🍒"];
+let cards=[...symbols,...symbols];
+let first=null,second=null;
+let lock=false;
+let moves=0;
+
+const grid=document.getElementById("grid");
+const movesDiv=document.getElementById("moves");
+
+function shuffle(array){
+return array.sort(()=>0.5-Math.random());
+}
+
+function createBoard(){
+grid.innerHTML="";
+shuffle(cards).forEach(symbol=>{
+const card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<div class="front"></div>
+<div class="back">${symbol}</div>
+`;
+
+card.addEventListener("click",()=>flipCard(card,symbol));
+grid.appendChild(card);
+});
+}
+
+function flipCard(card,symbol){
+if(lock || card.classList.contains("flip")) return;
+
+card.classList.add("flip");
+
+if(!first){
+first={card,symbol};
+return;
+}
+
+second={card,symbol};
+moves++;
+movesDiv.innerText="Moves: "+moves;
+lock=true;
+
+if(first.symbol===second.symbol){
+resetTurn();
+checkWin();
+}else{
+setTimeout(()=>{
+first.card.classList.remove("flip");
+second.card.classList.remove("flip");
+resetTurn();
+},800);
+}
+}
+
+function resetTurn(){
+[first,second]=[null,null];
+lock=false;
+}
+
+function checkWin(){
+const allFlipped=[...document.querySelectorAll(".card")].every(c=>c.classList.contains("flip"));
+if(allFlipped){
+setTimeout(()=>alert("You Win! 🎉"),200);
+}
+}
+
+function restart(){
+moves=0;
+movesDiv.innerText="Moves: 0";
+[first,second]=[null,null];
+lock=false;
+createBoard();
+}
+
+createBoard();
+</script>
+
+</body>
+</html>
