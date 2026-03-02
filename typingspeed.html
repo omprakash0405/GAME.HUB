@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Typing Speed Test</title>
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#667eea,#764ba2);
+font-family:sans-serif;
+color:white;
+}
+
+.container{
+width:700px;
+background:rgba(255,255,255,0.1);
+padding:30px;
+border-radius:20px;
+backdrop-filter:blur(15px);
+box-shadow:0 0 40px rgba(0,0,0,0.3);
+}
+
+h1{
+text-align:center;
+margin-bottom:15px;
+}
+
+#paragraph{
+background:rgba(0,0,0,0.3);
+padding:15px;
+border-radius:10px;
+min-height:100px;
+margin-bottom:15px;
+line-height:1.6;
+}
+
+textarea{
+width:100%;
+height:100px;
+border:none;
+border-radius:10px;
+padding:10px;
+font-size:16px;
+outline:none;
+resize:none;
+}
+
+.stats{
+display:flex;
+justify-content:space-between;
+margin-top:15px;
+font-size:16px;
+}
+
+.correct{
+color:#00ff88;
+}
+
+.incorrect{
+color:#ff3d3d;
+}
+
+button{
+margin-top:15px;
+padding:8px 20px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#ff1744;
+color:white;
+}
+
+button:hover{
+opacity:0.8;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Typing Speed Test</h1>
+
+<div id="paragraph"></div>
+<textarea id="input" placeholder="Start typing here..."></textarea>
+
+<div class="stats">
+<div>Time: <span id="time">60</span>s</div>
+<div>WPM: <span id="wpm">0</span></div>
+<div>Accuracy: <span id="accuracy">100</span>%</div>
+</div>
+
+<button onclick="restart()">Restart</button>
+</div>
+
+<script>
+const paragraphs=[
+"The quick brown fox jumps over the lazy dog near the river bank.",
+"JavaScript makes web pages interactive and dynamic for modern users.",
+"Coding daily improves problem solving skills and logical thinking.",
+"Frontend development includes HTML CSS and JavaScript technologies.",
+"Practice typing regularly to increase speed and accuracy efficiently."
+];
+
+const paragraphDiv=document.getElementById("paragraph");
+const input=document.getElementById("input");
+const timeSpan=document.getElementById("time");
+const wpmSpan=document.getElementById("wpm");
+const accuracySpan=document.getElementById("accuracy");
+
+let timer;
+let timeLeft=60;
+let started=false;
+let totalTyped=0;
+let correctTyped=0;
+
+function loadParagraph(){
+let random=paragraphs[Math.floor(Math.random()*paragraphs.length)];
+paragraphDiv.innerHTML="";
+random.split("").forEach(char=>{
+let span=document.createElement("span");
+span.innerText=char;
+paragraphDiv.appendChild(span);
+});
+}
+
+function startTimer(){
+timer=setInterval(()=>{
+timeLeft--;
+timeSpan.innerText=timeLeft;
+if(timeLeft===0){
+clearInterval(timer);
+input.disabled=true;
+}
+},1000);
+}
+
+input.addEventListener("input",()=>{
+if(!started){
+startTimer();
+started=true;
+}
+
+let chars=paragraphDiv.querySelectorAll("span");
+let typed=input.value.split("");
+
+totalTyped=typed.length;
+correctTyped=0;
+
+chars.forEach((char,index)=>{
+if(typed[index]==null){
+char.classList.remove("correct","incorrect");
+}else if(typed[index]===char.innerText){
+char.classList.add("correct");
+char.classList.remove("incorrect");
+correctTyped++;
+}else{
+char.classList.add("incorrect");
+char.classList.remove("correct");
+}
+});
+
+let wpm=Math.round((correctTyped/5)/((60-timeLeft)/60));
+wpmSpan.innerText=isNaN(wpm)?0:wpm;
+
+let accuracy=Math.round((correctTyped/totalTyped)*100);
+accuracySpan.innerText=isNaN(accuracy)?100:accuracy;
+});
+
+function restart(){
+clearInterval(timer);
+timeLeft=60;
+started=false;
+input.value="";
+input.disabled=false;
+timeSpan.innerText=60;
+wpmSpan.innerText=0;
+accuracySpan.innerText=100;
+loadParagraph();
+}
+
+loadParagraph();
+</script>
+
+</body>
+</html>
