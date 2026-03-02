@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Breakout Game</title>
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+font-family:sans-serif;
+color:white;
+}
+
+canvas{
+background:#111;
+border-radius:20px;
+box-shadow:0 0 40px rgba(0,200,255,0.6);
+}
+
+#score{
+margin-bottom:10px;
+font-size:18px;
+}
+
+button{
+margin-top:15px;
+padding:8px 20px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#ff3d00;
+color:white;
+display:none;
+}
+
+button:hover{
+opacity:0.8;
+}
+</style>
+</head>
+<body>
+
+<div id="score">Score: 0</div>
+<canvas id="game" width="480" height="320"></canvas>
+<button id="restart">Restart</button>
+
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+let ballRadius=8;
+let x=canvas.width/2;
+let y=canvas.height-30;
+let dx=3;
+let dy=-3;
+
+let paddleHeight=10;
+let paddleWidth=75;
+let paddleX=(canvas.width-paddleWidth)/2;
+
+let rightPressed=false;
+let leftPressed=false;
+
+let brickRowCount=5;
+let brickColumnCount=8;
+let brickWidth=50;
+let brickHeight=15;
+let brickPadding=10;
+let brickOffsetTop=30;
+let brickOffsetLeft=30;
+
+let score=0;
+let gameOver=false;
+
+const scoreDiv=document.getElementById("score");
+const restartBtn=document.getElementById("restart");
+
+let bricks=[];
+for(let c=0;c<brickColumnCount;c++){
+bricks[c]=[];
+for(let r=0;r<brickRowCount;r++){
+bricks[c][r]={x:0,y:0,status:1};
+}
+}
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Right"||e.key==="ArrowRight") rightPressed=true;
+if(e.key==="Left"||e.key==="ArrowLeft") leftPressed=true;
+});
+document.addEventListener("keyup",e=>{
+if(e.key==="Right"||e.key==="ArrowRight") rightPressed=false;
+if(e.key==="Left"||e.key==="ArrowLeft") leftPressed=false;
+});
+
+canvas.addEventListener("mousemove",e=>{
+let relativeX=e.clientX-canvas.offsetLeft;
+if(relativeX>0 && relativeX<canvas.width){
+paddleX=relativeX-paddleWidth/2;
+}
+});
+
+function drawBall(){
+ctx.beginPath();
+ctx.arc(x,y,ballRadius,0,Math.PI*2);
+ctx.fillStyle="#00e5ff";
+ctx.fill();
+ctx.closePath();
+}
+
+function drawPaddle(){
+ctx.beginPath();
+ctx.rect(paddleX,canvas.height-paddleHeight,paddleWidth,paddleHeight);
+ctx.fillStyle="#00c853";
+ctx.fill();
+ctx.closePath();
+}
+
+function drawBricks(){
+for(let c=0;c<brickColumnCount;c++){
+for(let r=0;r<brickRowCount;r++){
+if(bricks[c][r].status==1){
+let brickX=(c*(brickWidth+brickPadding))+brickOffsetLeft;
+let brickY=(r*(brickHeight+brickPadding))+brickOffsetTop;
+bricks[c][r].x=brickX;
+bricks[c][r].y=brickY;
+ctx.beginPath();
+ctx.rect(brickX,brickY,brickWidth,brickHeight);
+ctx.fillStyle="#ff1744";
+ctx.fill();
+ctx.closePath();
+}
+}
+}
+}
+
+function collisionDetection(){
+for(let c=0;c<brickColumnCount;c++){
+for(let r=0;r<brickRowCount;r++){
+let b=bricks[c][r];
+if(b.status==1){
+if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight){
+dy=-dy;
+b.status=0;
+score++;
+scoreDiv.innerText="Score: "+score;
+if(score==brickRowCount*brickColumnCount){
+alert("You Win! 🎉");
+endGame();
+}
+}
+}
+}
+}
+}
+
+function draw(){
+if(gameOver) return;
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+drawBricks();
+drawBall();
+drawPaddle();
+collisionDetection();
+
+if(x+dx>canvas.width-ballRadius||x+dx<ballRadius){
+dx=-dx;
+}
+if(y+dy<ballRadius){
+dy=-dy;
+}else if(y+dy>canvas.height-ballRadius){
+if(x>paddleX && x<paddleX+paddleWidth){
+dy=-dy;
+}else{
+alert("Game Over");
+endGame();
+}
+}
+
+if(rightPressed && paddleX<canvas.width-paddleWidth){
+paddleX+=5;
+}else if(leftPressed && paddleX>0){
+paddleX-=5;
+}
+
+x+=dx;
+y+=dy;
+requestAnimationFrame(draw);
+}
+
+function endGame(){
+gameOver=true;
+restartBtn.style.display="block";
+}
+
+restartBtn.onclick=()=>{
+document.location.reload();
+};
+
+draw();
+</script>
+
+</body>
+</html>
