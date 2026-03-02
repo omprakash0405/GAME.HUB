@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Snake Game</title>
+<style>
+body{
+margin:0;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+font-family:sans-serif;
+flex-direction:column;
+color:white;
+overflow:hidden;
+}
+
+canvas{
+background:#111;
+border-radius:20px;
+box-shadow:0 0 40px rgba(0,255,150,0.6);
+}
+
+#score{
+margin-bottom:10px;
+font-size:20px;
+}
+
+#restart{
+display:none;
+margin-top:15px;
+padding:10px 25px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+font-size:16px;
+background:#ff3d00;
+color:white;
+}
+
+#restart:hover{
+opacity:0.8;
+}
+</style>
+</head>
+<body>
+
+<div id="score">Score: 0</div>
+<canvas id="game" width="400" height="400"></canvas>
+<button id="restart">Restart</button>
+
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+const gridSize=20;
+const tileCount=canvas.width/gridSize;
+
+let snake=[{x:10,y:10}];
+let velocity={x:0,y:0};
+let food={x:5,y:5};
+let score=0;
+let speed=120;
+let gameOver=false;
+
+const scoreDiv=document.getElementById("score");
+const restartBtn=document.getElementById("restart");
+
+function gameLoop(){
+if(gameOver) return;
+
+update();
+draw();
+setTimeout(gameLoop,speed);
+}
+
+function update(){
+const head={x:snake[0].x+velocity.x,y:snake[0].y+velocity.y};
+snake.unshift(head);
+
+if(head.x===food.x && head.y===food.y){
+score++;
+speed=Math.max(60,speed-5);
+placeFood();
+}else{
+snake.pop();
+}
+
+if(
+head.x<0 || head.x>=tileCount ||
+head.y<0 || head.y>=tileCount ||
+snake.slice(1).some(seg=>seg.x===head.x && seg.y===head.y)
+){
+endGame();
+}
+
+scoreDiv.innerText="Score: "+score;
+}
+
+function draw(){
+ctx.fillStyle="#111";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+snake.forEach((seg,index)=>{
+ctx.fillStyle=index===0?"#00ff99":"#00cc66";
+ctx.fillRect(seg.x*gridSize,seg.y*gridSize,gridSize-2,gridSize-2);
+});
+
+ctx.fillStyle="#ff1744";
+ctx.fillRect(food.x*gridSize,food.y*gridSize,gridSize-2,gridSize-2);
+}
+
+function placeFood(){
+food.x=Math.floor(Math.random()*tileCount);
+food.y=Math.floor(Math.random()*tileCount);
+}
+
+function endGame(){
+gameOver=true;
+restartBtn.style.display="block";
+}
+
+document.addEventListener("keydown",e=>{
+if(e.key==="ArrowUp" && velocity.y===0){velocity={x:0,y:-1};}
+if(e.key==="ArrowDown" && velocity.y===0){velocity={x:0,y:1};}
+if(e.key==="ArrowLeft" && velocity.x===0){velocity={x:-1,y:0};}
+if(e.key==="ArrowRight" && velocity.x===0){velocity={x:1,y:0};}
+});
+
+canvas.addEventListener("click",()=>{
+velocity={x:1,y:0};
+});
+
+restartBtn.onclick=()=>{
+snake=[{x:10,y:10}];
+velocity={x:0,y:0};
+score=0;
+speed=120;
+gameOver=false;
+restartBtn.style.display="none";
+placeFood();
+gameLoop();
+};
+
+placeFood();
+gameLoop();
+</script>
+
+</body>
+</html>
