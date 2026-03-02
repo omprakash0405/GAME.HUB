@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Rock Paper Scissors</title>
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#1f1c2c,#928dab);
+font-family:sans-serif;
+color:white;
+text-align:center;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+#score{
+margin-bottom:15px;
+font-size:18px;
+}
+
+.choices{
+display:flex;
+gap:25px;
+margin:20px 0;
+}
+
+.choice{
+font-size:50px;
+cursor:pointer;
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,0.1);
+transition:0.3s;
+}
+
+.choice:hover{
+transform:scale(1.2);
+background:rgba(255,255,255,0.2);
+box-shadow:0 0 20px rgba(255,255,255,0.6);
+}
+
+#result{
+margin-top:15px;
+font-size:22px;
+font-weight:bold;
+min-height:30px;
+}
+
+button{
+margin-top:20px;
+padding:8px 20px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#ff1744;
+color:white;
+}
+
+button:hover{
+opacity:0.8;
+}
+</style>
+</head>
+<body>
+
+<h1>Rock Paper Scissors</h1>
+<div id="score">You: 0 | Computer: 0</div>
+
+<div class="choices">
+<div class="choice" onclick="play('rock')">✊</div>
+<div class="choice" onclick="play('paper')">✋</div>
+<div class="choice" onclick="play('scissors')">✌️</div>
+</div>
+
+<div id="result"></div>
+
+<button onclick="restart()">Restart</button>
+
+<script>
+let playerScore=0;
+let computerScore=0;
+
+const scoreDiv=document.getElementById("score");
+const resultDiv=document.getElementById("result");
+
+function play(playerChoice){
+const choices=["rock","paper","scissors"];
+const computerChoice=choices[Math.floor(Math.random()*3)];
+
+let result="";
+
+if(playerChoice===computerChoice){
+result="Draw!";
+}else if(
+(playerChoice==="rock" && computerChoice==="scissors")||
+(playerChoice==="paper" && computerChoice==="rock")||
+(playerChoice==="scissors" && computerChoice==="paper")
+){
+result="You Win!";
+playerScore++;
+}else{
+result="Computer Wins!";
+computerScore++;
+}
+
+scoreDiv.innerText=`You: ${playerScore} | Computer: ${computerScore}`;
+resultDiv.innerText=`You chose ${playerChoice} | Computer chose ${computerChoice} → ${result}`;
+}
+
+function restart(){
+playerScore=0;
+computerScore=0;
+scoreDiv.innerText="You: 0 | Computer: 0";
+resultDiv.innerText="";
+}
+</script>
+
+</body>
+</html>
