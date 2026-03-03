@@ -1,48 +1,66 @@
----
+<!-- ================= HEADER ================= -->
 
-## ✅ README for **GAME.HUB**
+<h1 align="center">🎮 GAME HUB</h1>
 
-```markdown
-# 🕹️ Frontend Arcade - GAME.HUB
+<p align="center">
+  <b>A Modern Browser Arcade Built With Pure HTML, CSS & JavaScript</b>
+</p>
 
-![Game Hub Arcade](https://media.giphy.com/media/l0HlOvJ7yaacpuSas/giphy.gif)
+<p align="center">
+  <a href="https://omprakash0405.github.io/GAME.HUB/">
+    <img src="https://img.shields.io/badge/🚀_Live_Demo-Click_Here-ff0080?style=for-the-badge&logo=vercel&logoColor=white" />
+  </a>
+  <img src="https://img.shields.io/badge/Made%20With-HTML%20%7C%20CSS%20%7C%20JS-00f7ff?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
+</p>
 
-A browser-based arcade collection featuring **classic games** built with pure HTML, CSS & JavaScript.
-
-🌐 **Try It Live:** https://omprakash0405.github.io/GAME.HUB/
-
----
-
-## 🕹️ Available Games
-
-| Game | Description |
-|------|-------------|
-| 🐦 **Flappy Bird** | Endless flying challenge |
-| 🔢 **2048** | Add numbers to reach 2048 |
-| ❌⭕ **Tic Tac Toe** | Classic strategy game |
-| 🐍 **Snake** | Retro snake arcade |
-| 🧠 **Memory Game** | Fun card matching |
-| ✊📄✂️ **Rock Paper Scissors** | Play against computer |
-| 🟦 **Breakout** | Brick breaker challenge |
-| ⌨️ **Typing Speed Test** | Test your skills |
-| 🏓 **Pong** | Classic paddle duel |
-| 🔢 **Sudoku** | Logic number puzzle |
+<p align="center">
+  <img src="https://media.giphy.com/media/l0HlOvJ7yaacpuSas/giphy.gif" width="600" />
+</p>
 
 ---
 
-## 🚀 Technologies Used
+## 🕹️ About The Project
 
-- 💙 HTML  
-- 🎨 CSS  
-- 💛 JavaScript  
-- 📦 No external libraries — pure vanilla coding
+**GAME HUB** is a fully responsive browser-based arcade platform where users can play multiple classic games — all built with pure frontend technologies.
 
-Perfect for learning and exploring interactive frontend projects!
+No frameworks.  
+No libraries.  
+Just raw logic + clean UI + smooth animations.
 
 ---
 
-## 🛠️ Clone & Run
+## 🎯 Available Games
 
-1. Clone the repo  
-   ```bash
-   git clone https://github.com/omprakash0405/GAME.HUB.git
+| 🎮 Game | 🔥 Description |
+|---------|----------------|
+| 🐦 Flappy Bird | Endless flying challenge |
+| 🐍 Snake | Retro arcade classic |
+| ❌⭕ Tic Tac Toe | Strategy battle |
+| 🔢 2048 | Number merging puzzle |
+| 🧠 Memory Game | Test your brain |
+| ✊📄✂️ Rock Paper Scissors | Play vs Computer |
+| 🧱 Breakout | Brick breaking fun |
+| ⌨️ Typing Speed Test | Measure typing speed |
+| 🏓 Pong | Classic paddle duel |
+| 🔢 Sudoku | Logic puzzle game |
+
+---
+
+## ✨ Features
+
+🚀 Smooth animations  
+🎨 Modern UI design  
+📱 Responsive layout  
+⚡ Fast & lightweight  
+🧠 Clean JavaScript logic  
+🎮 Instant play – no installation required  
+
+---
+
+## 🛠️ Tech Stack
+
+```bash
+HTML5
+CSS3 (Animations + Responsive Design)
+JavaScript (Game Logic)
